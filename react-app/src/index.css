@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .animate-in {
+    animation-fill-mode: both;
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  .zoom-in-95 {
+    animation: zoomIn95 0.2s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn95 {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Custom select styling for better dark theme integration */
+select {
+  background-image: none;
+}
+
+select option {
+  background-color: rgb(31 41 55);
+  color: rgb(243 244 246);
+  padding: 8px 12px;
+}
+
+select option:checked {
+  background-color: rgb(59 130 246);
+  color: white;
+}
+
+select:focus option:checked {
+  background-color: rgb(37 99 235);
+}
