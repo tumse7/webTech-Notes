@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { Note, NoteFormData } from '../types/Notes';
+import type { Note, NoteFormData, EditNoteData } from '../types/Notes';
 
 const STORAGE_KEY = 'notes-app-data';
 
@@ -38,6 +38,20 @@ export const useNotes = () => {
     setNotes(prev => [newNote, ...prev]);
   };
 
+  const editNote = (editData: EditNoteData) => {
+    setNotes(prev => prev.map(note => 
+      note.id === editData.id 
+        ? { 
+            ...note, 
+            title: editData.title,
+            content: editData.content,
+            tags: editData.tags,
+            updatedAt: new Date() 
+          }
+        : note
+    ));
+  };
+
   const deleteNote = (id: string) => {
     setNotes(prev => prev.filter(note => note.id !== id));
   };
@@ -50,6 +64,7 @@ export const useNotes = () => {
   return {
     notes,
     addNote,
+    editNote,
     deleteNote,
     getAllTags
   };

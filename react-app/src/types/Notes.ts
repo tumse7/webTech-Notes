@@ -12,3 +12,7 @@ export interface NoteFormData {
   content: string;
   tags: string[];
 }
+
+export interface EditNoteData extends NoteFormData {
+  id: string;
+}

@@ -4,10 +4,26 @@ import { SearchBar } from './components/SearchBar';
 import { NoteCard } from './components/NoteCard';
 import { useNotes } from './hooks/useNotes';
 import { useSearch } from './hooks/useSearch';
+import { useState } from 'react';
+import type { Note } from './types/Notes';
 
 function App() {
-  const { notes, addNote, deleteNote, getAllTags } = useNotes();
+  const { notes, addNote, editNote, deleteNote, getAllTags } = useNotes();
   const { searchTerm, setSearchTerm, selectedTag, setSelectedTag, filteredNotes } = useSearch(notes);
+  const [editingNote, setEditingNote] = useState<Note | null>(null);
+
+  const handleEditNote = (note: Note) => {
+    setEditingNote(note);
+  };
+
+  const handleUpdateNote = (updatedNote: { id: string } & { title: string; content: string; tags: string[] }) => {
+    editNote(updatedNote);
+    setEditingNote(null);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingNote(null);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800">
@@ -23,12 +39,18 @@ function App() {
             </h1>
           </div>
           <p className="text-gray-400 text-lg">
-            Organize your thoughts with tags and powerful search
+            Organize your thoughts with tags, markdown support, and powerful search
           </p>
         </div>
 
-        {/* Add Note Form */}
-        <AddNoteForm onAddNote={addNote} />
+        {/* Add/Edit Note Form */}
+        <AddNoteForm 
+          onAddNote={addNote}
+          onEditNote={handleUpdateNote}
+          editingNote={editingNote}
+          onCancelEdit={handleCancelEdit}
+          availableTags={getAllTags()}
+        />
 
         {/* Search Bar */}
         {notes.length > 0 && (
@@ -49,6 +71,7 @@ function App() {
                 key={note.id}
                 note={note}
                 onDelete={deleteNote}
+                onEdit={handleEditNote}
               />
             ))}
           </div>
